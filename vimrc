@@ -11,14 +11,13 @@ let g:CMD_INSTALL_NODEJS = "!curl -sL install-node.vercel.app/lts | bash /dev/st
 "=== Initialize VIM-PLUG ===
 "===========================
 if ((system("node -v")[1:] + 0) < 16)
-  :execute CMD_INSTALL_NODEJS
+  :silent execute CMD_INSTALL_NODEJS
 endif
 if empty(glob(DIR_VIMPLUG))
-  :execute CMD_INSTALL_VIMPLUG
-  autocmd VimEnter $MYVIMRC PlugInstall --sync | q
-  autocmd VimEnter $MYVIMRC source $MYVIMRC
+  :silent execute CMD_INSTALL_VIMPLUG
+  autocmd VimEnter $MYVIMRC PlugInstall --sync | source $MYVIMRC
 endif
-call plug#begin('~/.vim/plugged')
+call plug#begin(DIR_PLUGINS)
   Plug 'morhetz/gruvbox'
   Plug 'vim-airline/vim-airline'
   Plug 'preservim/nerdtree'
@@ -26,8 +25,9 @@ call plug#begin('~/.vim/plugged')
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
 call plug#end()
 
-autocmd VimEnter $MYVIMRC PlugInstall --sync | q
-autocmd VimEnter $MYVIMRC source $MYVIMRC
+set wildmenu
+
+autocmd BufEnter $MYVIMRC source $MYVIMRC 
 "====================
 "=== Basic Editor ===
 "====================

@@ -15,8 +15,8 @@ if ((system("node -v")[1:] + 0) < 16)
 endif
 if empty(glob(DIR_VIMPLUG))
   :execute CMD_INSTALL_VIMPLUG
-  autocmd VimEnter * PlugInstall --sync | q
-  :execute "source $MYVIMRC"
+  autocmd VimEnter $MYVIMRC PlugInstall --sync | q
+  autocmd VimEnter $MYVIMRC source $MYVIMRC
 endif
 call plug#begin('~/.vim/plugged')
   Plug 'morhetz/gruvbox'
@@ -26,6 +26,8 @@ call plug#begin('~/.vim/plugged')
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
 call plug#end()
 
+autocmd VimEnter $MYVIMRC PlugInstall --sync | q
+autocmd VimEnter $MYVIMRC source $MYVIMRC
 "====================
 "=== Basic Editor ===
 "====================
@@ -40,10 +42,10 @@ set nowritebackup
 set encoding=utf-8
 set hidden
 set cmdheight=1
-set list
+"set list
 "set listchars=tab:➪\ 
 "set listchars+=trail:·,
-set listchars+=eol:⤶
+"set listchars+=eol:⤶
 set scrolloff=5
 set textwidth=0
 set backspace=indent,eol,start
@@ -77,12 +79,14 @@ syntax enable
 syntax on
 set t_Co=256
 set background=dark
-colorscheme gruvbox
+try
+  colorscheme gruvbox
+catch
+endtry
 
 let g:airline#extensions#tabline#enabled = 1
-let g:airline_powerline_fonts = 1
-
-let vim_markdown_preview_github=1
+"let g:airline_powerline_fonts = 1
+"let vim_markdown_preview_github=1
 
 "================
 "=== Bind Key ===
@@ -120,7 +124,6 @@ nnoremap <leader>z :UndotreeToggle<CR>
 " NERDTree Toggle
 nnoremap <leader>e :NERDTreeToggle<CR>
 
-" 设置拷贝模式和常规模式
 nnoremap <leader>mc :set nonumber norelativenumber<CR>:set mouse=<CR>
 nnoremap <leader>mn :set number relativenumber<CR>:set mouse=a<CR>
 
@@ -133,6 +136,7 @@ nnoremap W :wq<CR>
 "================
 "=== Coc.nvim ===
 "================
+let g:coc_disable_startup_warning = 1
 let g:coc_global_extensions = [
       \ 'coc-json',
       \ 'coc-css',
@@ -169,7 +173,6 @@ function! s:show_documentation()
   endif
 endfunction
 "=====================================
-
 
 let g:indent_guides_enable_on_vim_startup = 1
 let g:indent_guides_start_level = 1
